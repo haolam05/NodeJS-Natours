@@ -2,6 +2,15 @@ const fs = require('fs');
 const dbFile = `${__dirname}/../dev-data/data/tours-simple.json`;
 const tours = JSON.parse(fs.readFileSync(dbFile));
 
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price)
+    return res.status(400).json({
+      status: 'fail',
+      message: 'bad request',
+    });
+  next();
+};
+
 exports.checkID = (req, res, next, val) => {
   console.log(val);
   if (+req.params.id > tours.length) {
