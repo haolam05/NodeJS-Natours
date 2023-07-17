@@ -2,7 +2,12 @@
   "extends": ["airbnb", "prettier", "plugin:node/recommended"],
   "plugins": ["prettier"],
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto" // This is what LF, CRLF, or CR is all about
+      }
+    ],
     "spaced-comment": "off",
     "no-console": "warn",
     "consistent-return": "off",
@@ -15,5 +20,12 @@
     "class-methods-use-this": "off",
     "prefer-destructuring": ["error", { "object": true, "array": false }],
     "no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next|val" }]
-  }
+  },
+  "node/no-unsupported-features/es-syntax": [
+    "error",
+    {
+      "version": ">=8.0.0",
+      "ignores": []
+    }
+  ]
 }

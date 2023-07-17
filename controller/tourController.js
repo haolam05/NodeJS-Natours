@@ -1,4 +1,5 @@
 const fs = require('fs');
+
 const dbFile = `${__dirname}/../dev-data/data/tours-simple.json`;
 const tours = JSON.parse(fs.readFileSync(dbFile));
 
@@ -12,7 +13,6 @@ exports.checkBody = (req, res, next) => {
 };
 
 exports.checkID = (req, res, next, val) => {
-  console.log(val);
   if (+req.params.id > tours.length) {
     return res.status(404).json({
       status: 'fail',
@@ -23,7 +23,6 @@ exports.checkID = (req, res, next, val) => {
 };
 
 exports.getAllTours = (req, res) => {
-  console.log(req.requestTime);
   res.status(200).json({
     status: 'success',
     requestedAt: req.requestTime,
@@ -41,9 +40,9 @@ exports.getTour = (req, res) => {
 
 exports.createTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
-  const newTour = Object.assign({ id: newId }, req.body);
+  const newTour = { id: newId, ...req.body };
   tours.push(newTour);
-  fs.writeFile(dbFile, JSON.stringify(tours), err => {
+  fs.writeFile(dbFile, JSON.stringify(tours), () => {
     res.status(201).json({
       status: 'success',
       data: newTour,
