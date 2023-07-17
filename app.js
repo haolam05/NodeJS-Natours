@@ -120,18 +120,15 @@ const deleteUser = (req, res) => {
 };
 
 // ROUTES
-app.route(`/api/${version}/tours`).get(getAllTours).post(createTour);
-app
-  .route(`/api/${version}/tours/:id`)
-  .get(getTour)
-  .patch(updateTour)
-  .delete(deleteTour);
-app.route(`/api/${version}/users`).get(getAllUsers).post(createUser);
-app
-  .route(`/api/${version}/users/:id`)
-  .get(getUser)
-  .patch(updateUser)
-  .delete(deleteUser);
+// create router for each resource (mounting routers)
+const tourRouter = express.Router();
+const userRouter = express.Router();
+app.use(`/api/${version}/tours`, tourRouter);
+app.use(`/api/${version}/users`, userRouter);
+tourRouter.route('/').get(getAllTours).post(createTour);
+tourRouter.route('/:id').get(getTour).patch(updateTour).delete(deleteTour);
+userRouter.route('/').get(getAllUsers).post(createUser);
+userRouter.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
 
 // START SERVER
 const port = 3000;
