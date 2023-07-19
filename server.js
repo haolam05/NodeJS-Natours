@@ -31,7 +31,14 @@ const tourSchema = new mongoose.Schema({
   },
 });
 const Tour = mongoose.model('Tour', tourSchema);
-console.log(Tour.collection);
+const testTour = new Tour({
+  name: 'The Park Camper',
+  price: 997,
+});
+testTour
+  .save()
+  .then(doc => console.log(doc))
+  .catch(err => console.log('❌', err));
 
 app.listen(process.env.PORT, () =>
   console.log(`App running on port ${process.env.PORT}`),
