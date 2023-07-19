@@ -5,7 +5,7 @@ exports.getAllTours = async (req, res) => {
     // BUILDING QUERY
     // 1a) Filtering
     const queryObj = { ...req.query };
-    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    const excludedFields = ['sort', 'fields', 'limit', 'page'];
     excludedFields.forEach(el => delete queryObj[el]);
 
     // 1b) Advanced Filtering
@@ -29,6 +29,19 @@ exports.getAllTours = async (req, res) => {
       query = query.select(selectedFields);
     } else {
       query.select('-__v'); // excluded '__v' field
+    }
+
+    // 4) Pagination
+    //  - limit: number of results per page
+    //  - page : page number
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 4;
+    const skip = (page - 1) * limit;
+    console.log(page, skip + 1, skip + 1 + limit);
+    query = query.skip(skip).limit(limit);
+    if (req.query.page) {
+      const numTours = await Tour.countDocuments();
+      if (skip >= numTours) throw new Error('This page does not exist!');
     }
 
     // EXECUTE QUERY
