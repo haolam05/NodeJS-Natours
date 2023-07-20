@@ -8,6 +8,8 @@ const tourSchema = new mongoose.Schema(
       required: [true, 'A tour must have a name'],
       unique: true,
       trim: true,
+      maxlength: [40, 'A tour name can not have more than 40 characters.'],
+      minlength: [10, 'A tour name can not have less than 10 characters.'],
     },
     slug: String,
     duration: {
@@ -21,10 +23,16 @@ const tourSchema = new mongoose.Schema(
     difficulty: {
       type: String,
       required: [true, 'A tour must have a difficulty'],
+      enum: {
+        values: ['easy', 'medium', 'difficult'],
+        message: "Difficulty options: 1) 'easy' 2) 'medium' 3) 'difficult'",
+      },
     },
     ratingsAverage: {
       type: Number,
       default: 0,
+      max: [5, 'Rating can not be more than 5.0.'],
+      min: [1, 'Rating can not be less than 1.0.'],
     },
     ratingsQuantity: {
       type: Number,
@@ -84,7 +92,6 @@ tourSchema.pre(/^find/, function (next) {
 });
 tourSchema.post(/^find/, function (docs, next) {
   console.log(`Query took ${Date.now() - this.start} milliseconds!`);
-  // console.log(docs);
   next();
 });
 
