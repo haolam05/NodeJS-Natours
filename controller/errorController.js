@@ -1,5 +1,10 @@
 const AppError = require('../utils/appError');
 
+const handleDuplicateFieldsDB = err => {
+  const msg = `Duplicate field value: '${err.keyValue.name}'. Please use another value!`;
+  return new AppError(msg, 400);
+};
+
 const handleCastErrorDB = err => {
   const msg = `Invalid ${err.path}: ${err.value}`;
   return new AppError(msg, 400);
@@ -44,7 +49,9 @@ module.exports = (err, req, res, next) => {
     let error = { ...err };
     error.name = err.name;
 
-    if (error.name === 'CastError') error = handleCastErrorDB(error);
+    if (error.name === 'CastError') error = handleCastErrorDB(error); // invalid DB id
+    if (error.code === 11000) error = handleDuplicateFieldsDB(error); // duplicate DB field
+
     sendErrorProd(error, res);
   }
 };
