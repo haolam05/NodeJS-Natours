@@ -1,5 +1,12 @@
 const AppError = require('../utils/appError');
 
+const handleValidationErrorDB = err => {
+  const msg = Object.values(err.errors)
+    .map(e => e.message)
+    .join('. ');
+  return new AppError(msg, 400);
+};
+
 const handleDuplicateFieldsDB = err => {
   const msg = `Duplicate field value: '${err.keyValue.name}'. Please use another value!`;
   return new AppError(msg, 400);
@@ -51,6 +58,8 @@ module.exports = (err, req, res, next) => {
 
     if (error.name === 'CastError') error = handleCastErrorDB(error); // invalid DB id
     if (error.code === 11000) error = handleDuplicateFieldsDB(error); // duplicate DB field
+    if (error.name === 'ValidationError')
+      error = handleValidationErrorDB(error); // invalid field value, ex: name too short
 
     sendErrorProd(error, res);
   }
