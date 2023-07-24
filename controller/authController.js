@@ -15,6 +15,7 @@ exports.signup = catchAsync(async (req, res) => {
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
+    passwordChangedAt: req.body.passwordChangedAt,
   });
   const token = signToken(newUser._id);
 
@@ -56,12 +57,24 @@ exports.protect = catchAsync(async (req, res, next) => {
   if (!token) return next(new AppError('Please loggin in to get access.', 401));
 
   // 2) Check if token is valid
+  // error is thrown in catchAsyn if token expires or token is invalid and is
+  // handled in global error handling middleware
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log(decoded);
 
   // 3) Check if user still exists
+  const user = await User.findById(decoded.id);
+  if (!user)
+    return next(
+      new AppError('The user belonging to this token is no longer exist.', 401),
+    );
 
-  // 4) Check if user chaned password after the JWT token was issued
+  // 4) Check if user changed password after the JWT token was issued
+  if (user.changedPasswordAfter(decoded.iat))
+    return next(
+      new AppError('User recently changed password! Plase log in again', 401),
+    );
 
+  // 5) Grant access to protected route
+  req.user = user;
   next();
 });
