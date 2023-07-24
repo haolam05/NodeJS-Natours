@@ -45,3 +45,18 @@ exports.login = catchAsync(async (req, res, next) => {
     token,
   });
 });
+
+exports.protect = catchAsync(async (req, res, next) => {
+  // 1) Check if token exists
+  let token;
+
+  if (!token) return next(new AppError('Please loggin in to get access.', 401));
+
+  // 2) Check if token is valid
+
+  // 3) Check if user still exists
+
+  // 4) Check if user chaned password after the JWT token was issued
+
+  next();
+});
