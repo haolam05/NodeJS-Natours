@@ -29,6 +29,7 @@ const sendErrorDev = (err, res) => {
 const sendErrorProd = (err, res) => {
   // Operational, trusted error: send message to client
   if (err.isOperational) {
+    console.log(err);
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
@@ -55,6 +56,7 @@ module.exports = (err, req, res, next) => {
   if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
     error.name = err.name;
+    error.message = err.message;
 
     if (error.name === 'CastError') error = handleCastErrorDB(error); // invalid DB id
     if (error.code === 11000) error = handleDuplicateFieldsDB(error); // duplicate DB field
