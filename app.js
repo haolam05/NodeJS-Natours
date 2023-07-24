@@ -17,9 +17,8 @@ app.use((req, res, next) => {
 });
 
 // ROUTES
-const version = 'v1';
-app.use(`/api/${version}/tours`, tourRouter);
-app.use(`/api/${version}/users`, userRouter);
+app.use(`/api/${process.env.VERSION}/tours`, tourRouter);
+app.use(`/api/${process.env.VERSION}/users`, userRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

@@ -1,5 +1,11 @@
 const AppError = require('../utils/appError');
 
+const handleJWTError = () =>
+  new AppError('Invalid token. Please log in again!', 401);
+
+const handleJWTExpireError = () =>
+  new AppError('Expired token! PLease log in again.', 401);
+
 const handleValidationErrorDB = err => {
   const msg = Object.values(err.errors)
     .map(e => e.message)
@@ -62,6 +68,8 @@ module.exports = (err, req, res, next) => {
     if (error.code === 11000) error = handleDuplicateFieldsDB(error); // duplicate DB field
     if (error.name === 'ValidationError')
       error = handleValidationErrorDB(error); // invalid field value, ex: name too short
+    if (error.name === 'JsonWebTokenError') error = handleJWTError(error);
+    if (error.name === 'TokenExpiredError') error = handleJWTExpireError(error);
 
     sendErrorProd(error, res);
   }
