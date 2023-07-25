@@ -53,6 +53,12 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.pre('save', function (next) {
+  if (this.isModified('password') && !this.isNew)
+    this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
 userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword,
@@ -75,7 +81,7 @@ userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
 
   this.passwordResetExpires =
-    Date.now() + process.env.PASSWORD_RESET_EXPIRES * 60 * 60;
+    Date.now() + +process.env.PASSWORD_RESET_EXPIRES * 60 * 1000;
   this.passwordResetToken = crypto // saved encrypted version to compare later
     .createHash('sha256')
     .update(resetToken)
