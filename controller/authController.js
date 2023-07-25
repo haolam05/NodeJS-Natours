@@ -56,7 +56,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   const { authorization } = req.headers;
   if (authorization && authorization.startsWith('Bearer'))
     token = authorization.split(' ')[1];
-  if (!token) return next(new AppError('Please loggin in to get access.', 401));
+  if (!token) return next(new AppError('Please login to get access.', 401));
 
   // 2) Check if token is valid
   // error is thrown in catchAsyn if token expires or token is invalid and is
@@ -73,7 +73,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   // 4) Check if user changed password after the JWT token was issued
   if (user.changedPasswordAfter(decoded.iat))
     return next(
-      new AppError('User recently changed password! Plase log in again.', 401),
+      new AppError('User recently changed password! Plase login again.', 401),
     );
 
   // 5) Grant access to protected route
@@ -163,7 +163,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user.id).select('+password');
 
   // 2) Throw error if posted current password is incorrect
-  if (!(await user.correctPassword(req.body.passwordConfirm, user.password)))
+  if (!(await user.correctPassword(req.body.passwordCurrent, user.password)))
     return next(new AppError('Your current password is wrong.', 401));
 
   // 3) Update password
