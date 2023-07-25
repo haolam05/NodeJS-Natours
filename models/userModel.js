@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
@@ -38,12 +39,14 @@ const userSchema = new mongoose.Schema({
     },
   },
   passwordChangedAt: Date,
+  passwordResetToken: String,
+  passwordResetExpires: Date,
 });
 
 userSchema.pre('save', async function (next) {
   // encrypt when password is actually modified (on save() & create())
   if (this.isModified('password')) {
-    this.password = await bcrypt.hash(this.password, 12);
+    this.password = await bcrypt.hash(this.password, 12); // saved encrypted version
     this.passwordConfirm = undefined;
   }
 
@@ -64,8 +67,20 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
     this.passwordChangedAt.getTime() / 1000,
     10,
   );
-  console.log(changedTimestamp);
+
   return JWTTimestamp < changedTimestamp; // user changed pswd after token is issued
+};
+
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+
+  this.passwordResetExpires = Date.now() + 10 * 60 * 60;
+  this.passwordResetToken = crypto // saved encrypted version to compare later
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  return resetToken;
 };
 
 const User = mongoose.model('User', userSchema);
