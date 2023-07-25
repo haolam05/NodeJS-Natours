@@ -74,7 +74,8 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
 
-  this.passwordResetExpires = Date.now() + 10 * 60 * 60;
+  this.passwordResetExpires =
+    Date.now() + process.env.PASSWORD_RESET_EXPIRES * 60 * 60;
   this.passwordResetToken = crypto // saved encrypted version to compare later
     .createHash('sha256')
     .update(resetToken)
