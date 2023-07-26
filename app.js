@@ -2,6 +2,8 @@ const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const globalErrorHandler = require('./controller/errorController');
@@ -20,7 +22,7 @@ const limiter = rateLimit({
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 // Set security HTTP headers
-app.use('', helmet());
+app.use(helmet());
 
 // Limit requests from the same API
 app.use('/api', limiter);
@@ -29,8 +31,10 @@ app.use('/api', limiter);
 app.use(express.json({ limit: '10kb' })); // limit data injected into body
 
 // Data sanitization against NoSQL query injection
+app.use(mongoSanitize());
 
 // Data sanitization against XXS (Cross Site Scripting) attacks
+app.use(xss());
 
 // Serving static files
 app.use(express.static(`${__dirname}/public`));
