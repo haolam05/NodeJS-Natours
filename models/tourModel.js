@@ -118,6 +118,13 @@ tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
 
+// Virtual populate
+tourSchema.virtual('reviews', {
+  ref: 'Review', // child Model's name
+  foreignField: 'tour', // field that refered to me(parent) in child schema - stores Tour's ID
+  localField: '_id', // ID stored in child is called '_id' here
+});
+
 // Document middleware: runs b4 .save(), .create()
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
