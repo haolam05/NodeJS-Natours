@@ -61,8 +61,16 @@ reviewSchema.statics.calcAvgRatings = async function (tourId) {
   });
 };
 
+// 1. Caculate average ratings when a new review is created
 reviewSchema.post('save', function () {
   this.constructor.calcAvgRatings(this.tour);
+});
+
+// 2. Calculate average ratings when a review is updated or deleted
+reviewSchema.post(/^findOneAnd/, async doc => {
+  if (doc) {
+    await doc.constructor.calcAvgRatings(doc.tour);
+  }
 });
 
 const Review = mongoose.model('Review', reviewSchema);
