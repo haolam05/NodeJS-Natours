@@ -100,6 +100,10 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
         400,
       ),
     );
+  if (unit !== 'mi' && unit !== 'km')
+    return next(
+      new AppError('Unit must be in miles(mi) or kilometer(km).', 400),
+    );
 
   const tours = await Tour.find({
     startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
@@ -125,6 +129,10 @@ exports.getDistances = catchAsync(async (req, res, next) => {
         'Please provide lattitude and longitude in the format lat,lng.',
         400,
       ),
+    );
+  if (unit !== 'mi' && unit !== 'km')
+    return next(
+      new AppError('Unit must be in miles(mi) or kilometer(km).', 400),
     );
 
   const distances = await Tour.aggregate([
