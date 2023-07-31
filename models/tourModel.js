@@ -32,7 +32,7 @@ const tourSchema = new mongoose.Schema(
     },
     ratingsAverage: {
       type: Number,
-      default: 0,
+      default: 4.5,
       max: [5, 'Rating can not be more than 5.0'],
       min: [1, 'Rating can not be less than 1.0'],
     },
@@ -149,9 +149,8 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 
-tourSchema.post(/^find/, function (docs, next) {
+tourSchema.post(/^find/, function () {
   console.log(`Query took ${Date.now() - this.start} milliseconds!`);
-  next();
 });
 
 // Aggregation middleware
