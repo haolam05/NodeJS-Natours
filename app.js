@@ -1,4 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -15,6 +16,9 @@ const AppError = require('./utils/appError');
 
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
 // Helper functions
 const limiter = rateLimit({
   max: 100, // 100 requests per hour
@@ -24,6 +28,9 @@ const limiter = rateLimit({
 
 // GLOBAL MIDDLEWARES
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
+
+// Serving static files
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Set security HTTP headers
 app.use(helmet());
@@ -55,9 +62,6 @@ app.use(
   }),
 );
 
-// Serving static files
-app.use(express.static(`${__dirname}/public`));
-
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -65,6 +69,9 @@ app.use((req, res, next) => {
 });
 
 // ROUTES
+app.get('/', (req, res) => {
+  res.status(200).render('base');
+});
 app.use(`/api/${process.env.VERSION}/tours`, tourRouter);
 app.use(`/api/${process.env.VERSION}/users`, userRouter);
 app.use(`/api/${process.env.VERSION}/reviews`, reviewRouter);
