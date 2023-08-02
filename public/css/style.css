@@ -156,13 +156,13 @@ body {
     linear,
     left top,
     right bottom,
-    from(rgba(125, 213, 111, 0.85)),
-    to(rgba(40, 180, 135, 0.85))
+    from(rgba(125, 213, 111, 0.7)),
+    to(rgba(40, 180, 135, 0.7))
   );
   background-image: linear-gradient(
     to bottom right,
-    rgba(125, 213, 111, 0.85),
-    rgba(40, 180, 135, 0.85)
+    rgba(125, 213, 111, 0.7),
+    rgba(40, 180, 135, 0.7)
   );
 }
 
