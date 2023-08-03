@@ -17,6 +17,7 @@ const AppError = require('./utils/appError');
 
 const app = express();
 
+// use bug as view engine, have access to all .pug files in views folder (render)
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -30,7 +31,8 @@ const limiter = rateLimit({
 // GLOBAL MIDDLEWARES
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
-// Serving static files
+// Serving static files (from public folder)
+// All rendered .pug files will have access to route from /public
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set security HTTP headers
