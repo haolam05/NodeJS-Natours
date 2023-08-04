@@ -45,7 +45,7 @@ const logout = async () => {
   }
 };
 
-const form = document.querySelector('.form');
+const form = document.querySelector('.form--login');
 if (form)
   form.addEventListener('submit', e => {
     e.preventDefault();

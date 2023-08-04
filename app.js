@@ -45,6 +45,7 @@ app.use('/api', limiter);
 // Parse data from body, and parse data from cookie (to get jwt login token)
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' })); // limit data injected into body
+app.use(express.urlencoded({ extended: true, limit: '10kb' })); // req.body (parse data coming from a form)
 app.use(cookieParser()); // req.cookies
 
 // Data sanitization against NoSQL query injection
