@@ -34,7 +34,7 @@ exports.updateOne = Model =>
   });
 
 exports.createOne = Model =>
-  catchAsync(async (req, res) => {
+  catchAsync(async (req, res, next) => {
     const newDocument = await Model.create(req.body);
 
     res.status(201).json({
@@ -62,7 +62,7 @@ exports.getOne = (Model, popOptions) =>
   });
 
 exports.getAll = Model =>
-  catchAsync(async (req, res) => {
+  catchAsync(async (req, res, next) => {
     // To allow for nested GET reviews on tour
     let filter = {};
     if (req.params.tourId) filter = { tour: req.params.tourId };
