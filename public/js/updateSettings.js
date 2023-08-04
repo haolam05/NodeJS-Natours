@@ -1,15 +1,22 @@
 /* eslint-disable */
 
-const updateData = async (name, email) => {
+// type is either 'password' or 'data'
+// const updateData = async (name, email) => {
+const updateSettings = async (type, data) => {
   try {
+    const url =
+      type === 'password'
+        ? 'http://127.0.0.1:3000/api/v1/users/updateMyPassword'
+        : 'http://127.0.0.1:3000/api/v1/users/updateMe';
+
     const res = await axios({
       method: 'PATCH',
-      url: 'http://127.0.0.1:3000/api/v1/users/updateMe',
-      data: { name, email },
+      url,
+      data,
     });
 
     if (res.data.status === 'success') {
-      showAlert('success', 'Data updated successfully!');
+      showAlert('success', `${type.toUpperCase()} updated successfully!`);
     }
   } catch (err) {
     showAlert('error', err.response.data.message);
@@ -22,5 +29,25 @@ if (formUserData)
     e.preventDefault();
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
-    updateData(name, email);
+    updateSettings('data', { name, email });
+  });
+
+const formUserPassword = document.querySelector('.form-user-password');
+if (formUserPassword)
+  formUserPassword.addEventListener('submit', async e => {
+    e.preventDefault();
+    document.querySelector('.btn--save-password').textContent = 'Updating...';
+
+    const passwordCurrent = document.getElementById('password-current').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password-confirm').value;
+    await updateSettings('password', {
+      passwordCurrent,
+      password,
+      passwordConfirm,
+    });
+    document.querySelector('.btn--save-password').textContent = 'Save password';
+    document.getElementById('password-current').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('password-confirm').value = '';
   });
