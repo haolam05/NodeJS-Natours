@@ -43,3 +43,7 @@ block content
               | 
               span.card__footer-text= `rating (${tour.ratingsQuantity})`
             a.btn.btn--green.btn--small(href=`/tour/${tour.slug}`) Details
+
+block script
+  //- script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js')
+  script(src='/js/login.js')

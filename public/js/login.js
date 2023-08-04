@@ -29,9 +29,30 @@ const login = async (email, password) => {
   }
 };
 
-document.querySelector('.form').addEventListener('submit', e => {
-  e.preventDefault();
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  login(email, password);
-});
+const logout = async () => {
+  try {
+    const res = await axios({
+      method: 'GET',
+      url: 'http://127.0.0.1:3000/api/v1/users/logout',
+    });
+    if (res.data.status === 'success') {
+      showAlert('success', 'Logged out successfully!');
+      window.setTimeout(() => location.reload(true), 1500);
+    }
+  } catch (err) {
+    console.log(err);
+    showAlert('error', 'Error logging out! Try again.');
+  }
+};
+
+const form = document.querySelector('.form');
+if (form)
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    login(email, password);
+  });
+
+const logOutBtn = document.querySelector('.nav__el--logout');
+if (logOutBtn) logOutBtn.addEventListener('click', logout);
