@@ -7,6 +7,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -41,8 +42,10 @@ app.use(helmet());
 // Limit requests from the same API
 app.use('/api', limiter);
 
+// Parse data from body, and parse data from cookie (to get jwt login token)
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' })); // limit data injected into body
+app.use(cookieParser()); // req.cookies
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
@@ -68,6 +71,7 @@ app.use(
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  console.log(req.cookies);
   next();
 });
 
