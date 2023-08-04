@@ -1,5 +1,6 @@
 const Tour = require('../models/tourModel');
 const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
 const CSP =
   "default-src 'self' https://*.mapbox.com ;base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src https://cdnjs.cloudflare.com https://api.mapbox.com 'self' blob: ;script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests;";
@@ -22,6 +23,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
     path: 'reviews',
     fields: 'name review rating user',
   });
+  if (!tour) return next(new AppError('There is no tour with that name.', 404));
 
   // 2) Build template
   // 3) Render template using data from 1)
