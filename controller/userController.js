@@ -6,13 +6,14 @@ const factory = require('./handlerFactory');
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'public/img/users'); // params: err - destination to save img
+    cb(null, 'public/img/users'); // params: err - destination to save img (ON DISK)
   },
   filename: (req, file, cb) => {
     const extension = file.mimetype.split('/')[1];
     cb(null, `user-${req.user.id}-${Date.now()}.${extension}`);
   },
 });
+// const multerStorage = multer.memoryStorage(); // saved in memory (available on req.file.buffer)
 
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image')) return cb(null, true);
@@ -25,6 +26,16 @@ const upload = multer({
 });
 
 exports.uploadUserPhoto = upload.single('photo');
+
+// exports.resizeUserPhoto = (req, res, next) => {
+//   if (!req.file) return next();
+//   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+//   sharp(req.file.buffer)
+//     .resize(500, 500)
+//     .toFormat('jpeg')
+//     .jpeg({ quality: 90 })
+//     .toFile(`public/img/users/${req.file.filename}`);
+// };
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
