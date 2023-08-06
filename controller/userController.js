@@ -1,3 +1,4 @@
+// const sharp = require('sharp')
 const multer = require('multer');
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');

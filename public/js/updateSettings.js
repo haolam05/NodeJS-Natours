@@ -27,9 +27,16 @@ const formUserData = document.querySelector('.form-user-data');
 if (formUserData)
   formUserData.addEventListener('submit', e => {
     e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    updateSettings('data', { name, email });
+    // const name = document.getElementById('name').value;
+    // const email = document.getElementById('email').value;
+    // updateSettings('data', { name, email });
+
+    // since we have photo (multipart in form), we need to re-create the form
+    const form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+    updateSettings('data', form);
   });
 
 const formUserPassword = document.querySelector('.form-user-password');
