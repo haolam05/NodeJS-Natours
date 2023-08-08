@@ -38,7 +38,8 @@ if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set security HTTP headers
-app.use(helmet());
+// app.use(helmet());
+app.use(helmet.crossOriginEmbedderPolicy({ policy: 'credentialless' }));
 
 // Limit requests from the same API
 app.use('/api', limiter);
