@@ -9,6 +9,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cors = require('cors');
 
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -35,6 +36,9 @@ const limiter = rateLimit({
 
 // GLOBAL MIDDLEWARES
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
+
+// Access-Control-Allow-Origin - *
+app.use(cors());
 
 // Serving static files (from public folder)
 // All rendered .pug files will have access to route from /public
