@@ -17,7 +17,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     // temporary workaround for development only - not secure - can booked without pay
     success_url: `${req.protocol}://${req.get('host')}/?tour=${
       req.params.tourId
-    }&user=${req.user.id}&price=${tour.price}`,
+    }&user=${req.user.id}&price=${tour.price}&alert=booking`,
 
     cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
 
@@ -55,7 +55,10 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
   await Booking.create({ tour, user, price });
 
   // hide the params: tour,user,price (development only - temporary solution)
-  res.redirect(req.originalUrl.split('?')[0]);
+  const parts = req.originalUrl.split('?');
+  const url = parts[0];
+  const alert = parts[1].split('&').slice(-1)[0];
+  res.redirect(`${url}?${alert}`);
 });
 
 ////////////////////////////////////////////////////////////////

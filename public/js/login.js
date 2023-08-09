@@ -60,3 +60,6 @@ if (form)
 
 const logOutBtn = document.querySelector('.nav__el--logout');
 if (logOutBtn) logOutBtn.addEventListener('click', logout);
+
+const alertMessage = document.querySelector('body').dataset.alert;
+if (alertMessage !== '') showAlert('success', alertMessage, 20);
