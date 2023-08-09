@@ -20,6 +20,8 @@ const AppError = require('./utils/appError');
 
 const app = express();
 
+app.enable('trust proxy');
+
 // use bug as view engine, have access to all .pug files in views folder (render)
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
