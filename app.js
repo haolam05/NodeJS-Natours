@@ -39,6 +39,7 @@ if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 // Access-Control-Allow-Origin - *
 app.use(cors());
+app.options('*', cors()); // respond to OPTIONS request
 
 // Serving static files (from public folder)
 // All rendered .pug files will have access to route from /public
