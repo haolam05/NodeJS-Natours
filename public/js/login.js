@@ -16,6 +16,7 @@ const login = async (email, password) => {
   try {
     const res = await axios({
       method: 'POST',
+      // url: '/api/v1/users/login' // production
       url: 'http://127.0.0.1:3000/api/v1/users/login',
       data: { email, password },
     });
@@ -33,11 +34,14 @@ const logout = async () => {
   try {
     const res = await axios({
       method: 'GET',
+      // url: '/api/v1/users/logout', // production
       url: 'http://127.0.0.1:3000/api/v1/users/logout',
     });
+
     if (res.data.status === 'success') {
       showAlert('success', 'Logged out successfully!');
-      window.setTimeout(() => location.reload(true), 1500);
+      window.setTimeout(() => location.assign('/'), 1500);
+      // window.setTimeout(() => location.reload(true), 1500);
     }
   } catch (err) {
     console.log(err);
