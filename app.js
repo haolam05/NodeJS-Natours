@@ -16,6 +16,7 @@ const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
+const bookingController = require('./controller/bookingController');
 const globalErrorHandler = require('./controller/errorController');
 const AppError = require('./utils/appError');
 
@@ -51,6 +52,13 @@ app.use(helmet.crossOriginEmbedderPolicy({ policy: 'credentialless' }));
 
 // Limit requests from the same API
 app.use('/api', limiter);
+
+// this route needs to come b4 body parser(json), need raw data (stream)
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout,
+);
 
 // Parse data from body, and parse data from cookie (to get jwt login token)
 // Body parser, reading data from body into req.body
