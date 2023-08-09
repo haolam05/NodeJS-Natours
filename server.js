@@ -31,3 +31,9 @@ process.on('unhandledRejection', err => {
   console.log(err.name, err.message);
   server.close(() => process.exit(1));
 });
+
+// Heroku shuts down our application every 24hr and emits 'SIGTERM' signal
+process.on('SIGTERM', () => {
+  console.log('SIGTERM RECEIVED. Shutting down gracefully. 👋');
+  server.close(() => console.log('❌ Process terminated!'));
+});
