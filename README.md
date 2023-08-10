@@ -9,7 +9,7 @@ Website Layout
 ![2](https://github.com/haolam05/NodeJS-natours/assets/71291057/88484de9-d9ab-460b-a127-5471d67427ad)
 ![3](https://github.com/haolam05/NodeJS-natours/assets/71291057/728148dc-de56-4c08-9279-ad12c2f180cd)
 ![4](https://github.com/haolam05/NodeJS-natours/assets/71291057/9017f67c-4963-41ed-8898-5d4b8115de52)
-![Uploading 5.png…]()
+![5](https://github.com/haolam05/NodeJS-natours/assets/71291057/e1b314d8-81eb-4286-a0ca-e2617ba52e4b)
 
 Stripe checkout
 ![stripe](https://github.com/haolam05/NodeJS-natours/assets/71291057/4f2afe51-f5d6-4d3b-89aa-4c54d2a44639)
