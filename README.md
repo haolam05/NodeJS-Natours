@@ -1,6 +1,6 @@
 ﻿# NodeJS-Natours
 
-RESTful API
+RESTFul API
 ![postman](https://github.com/haolam05/NodeJS-natours/assets/71291057/7e16d7e4-71a8-4b68-afa8-8ce1d7ca4c56)
 ![published API](https://github.com/haolam05/NodeJS-natours/assets/71291057/2086fc80-73d2-4d60-ba4d-91973d4ef458)
 
